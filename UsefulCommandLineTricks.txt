@@ -1,0 +1,73 @@
+::----------------------------------------Initial Notes----------------------------------------------
+Abscondito!
+
+
+::-----------------------------------------Diagnostics-----------------------------------------------
+::Check the Hard Drive for bad sectors
+chkdsk
+
+::Scan the windows OS for errors
+sfc /scannow
+
+::Hard Drive speed check
+winsat disk -drive C
+
+::System information
+Systeminfo
+
+::Reset Graphics Driverds
+Win+Ctrl+Shift+B
+
+::Online Image Cleanup
+DISM /Online /Cleanup-Image /RestoreHealth
+
+::----------------------------------------Useful Tweaks----------------------------------------------
+::Disable Hibernation
+powercfg.exe /hibernate off
+powercfg -h off
+
+::---------------------------------------Useful IP info----------------------------------------------
+::Display important IP information and omit non-used interfaces
+ipconfig /all |findstr /I "ipv4 ipv6 gateway server servers"
+
+::----------------------------------------Wifi Grabber-----------------------------------------------
+::Grab all wifi networks and then reveal the password stored locally on system
+netsh wlan show profile
+netsh wlan show profile {WiFi-name} key=clear | findstr /I /C:"Key Content"
+
+::-------------------------------------Get Current Drivers-------------------------------------------
+::Grab all installed drivers and export it to a CSV
+cd c:\users\%USERNAME%\Desktop
+driverquery /FO CSV > Currentdrivers.csv
+start Currentdrivers.csv
+
+::------------------------------------------GP Result------------------------------------------------
+::Grab current group policy and related information
+cd c:\users\%USERNAME%\Desktop
+gpresult -h gpresult.html -f
+start gpresult.html
+
+::-----------------------------------------Ping Checker----------------------------------------------
+::Checks for network drops by omitting positive results
+@echo off
+cd C:\Users\%USERNAME%\Desktop\
+ping -n 75000 0.0.0.0 | find /v "Reply from" >> pinglog.txt
+
+::-----------------------------Start Active Directory Users and Computers----------------------------
+::In case the shortcut does not work
+::win+r dsa.msc/gpmc.msc also works
+@echo off
+start dsa.msc
+start gpmc.msc
+::---------------------------------------Map A Network Printer---------------------------------------
+::List Printers
+wmic printer list brief
+::Add Network Printer
+::For the printer name, use \\server-foo\Fooprinter
+rundll32 printui.dll PrintUIEntry /in /n "Printer Name/Mapping"
+
+-------------------------------------Export Dynamic Distribution Group-------------------------------
+Get-Recipient -RecipientPreviewFilter {get-dynamicdistributiongroup {Group}.RecipientFilter -OrganizationalUnit $group.RecipientContainer : Select Displayname | Export=Csv "C:\Export.csv
+
+---------------------------------------Export Active Directory Group---------------------------------
+Get-ADGroupMember -identity “Group” | select name | Export-csv -path C:\Groupmembers.csv -NoTypeInformation
