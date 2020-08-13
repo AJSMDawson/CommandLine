@@ -1,0 +1,4 @@
+@echo off
+::Stop and Disable superfetch service, run as admin
+net stop superfetch
+sc config sysmain start=disabled
