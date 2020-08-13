@@ -61,9 +61,3 @@ wmic printer list brief
 ::Add Network Printer
 ::For the printer name, use \\server-foo\Fooprinter
 rundll32 printui.dll PrintUIEntry /in /n "Printer Name/Mapping"
-
--------------------------------------Export Dynamic Distribution Group-------------------------------
-Get-Recipient -RecipientPreviewFilter {get-dynamicdistributiongroup {Group}.RecipientFilter -OrganizationalUnit $group.RecipientContainer : Select Displayname | Export=Csv "C:\Export.csv
-
----------------------------------------Export Active Directory Group---------------------------------
-Get-ADGroupMember -identity “Group” | select name | Export-csv -path C:\Groupmembers.csv -NoTypeInformation
